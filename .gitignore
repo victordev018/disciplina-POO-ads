@@ -1,1 +1,9 @@
 *.js
+
+*.iml
+
+*.idea
+
+*.vscode
+
+/out
