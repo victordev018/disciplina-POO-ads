@@ -6,4 +6,6 @@
 
 *.vscode
 
+*.obsidian
+
 /out
