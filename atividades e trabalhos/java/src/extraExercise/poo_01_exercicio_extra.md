@@ -181,3 +181,7 @@
 
 ## __Questão 09:__ Crie uma classe chamada SituacaoFinanceira com os atributos valorCreditos e  valorDebitos. Crie um método chamado calcularSaldo() que retorna/calcula a  diferença entre crédito e débito. Instancie uma classe SituacaoFinanceira, inicialize os dois atributos e exiba o resultado do método calcularSaldo().
 
+[clique aqui para acessar os códigos de resolução no github](https://github.com/victordev018/POO-discipline-ads/tree/main/atividades%20e%20trabalhos/java/src/extraExercise/financialExercise)
+
+## __Questão 10:__ Represente as classes das questões 8 e 9 no formato UML.
+
