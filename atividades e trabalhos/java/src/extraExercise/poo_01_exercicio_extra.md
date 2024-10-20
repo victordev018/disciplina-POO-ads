@@ -185,3 +185,5 @@
 
 ## __Questão 10:__ Represente as classes das questões 8 e 9 no formato UML.
 
+![Uml das classes Circle e FinancialSituation](https://github.com/victordev018/POO-discipline-ads/blob/main/atividades%20e%20trabalhos/java/src/extraExercise/umlImage/uml_circle_and_financialSituation_class.png?raw=true)
+
