@@ -172,3 +172,8 @@
             - Promover a dama
 
 ## __Questão 07:__  Considerando o exemplo da classe Retangulo dos slides, implemente um método  adicional chamado que calcule o perímetro do retângulo. Teste os métodos do  retângulo. 
+
+[clique aqui para conferir os códigos de resolução no github](https://github.com/victordev018/POO-discipline-ads/tree/main/atividades%20e%20trabalhos/java/src/extraExercise/rectangleProgram)
+
+## __Questçao 08:__ Crie uma classe Circulo que possua um atributo raio. Crie dois métodos que  calculam a área e o perímetro. Instancie um objeto dessa classe, atribua um valor  ao raio e exiba a área e o perímetro chamando os dois métodos definidos. 
+
