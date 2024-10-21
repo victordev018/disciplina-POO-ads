@@ -51,7 +51,7 @@
 | cpf                |     sistema de gerenciamento de estoque            |                             sistema e-commerce | sistema bancário                                           |
 | histórico de saúde |          sistema gerenciamento de estoque          |              sistema de uma academia de treino | sistema clínica médica                                     |
 | seguidores         |                  sistema bancário                  |                         sistema de rede social | sistema de marketing de influenciadores digitais           |
-| habilidade destra  |   sistema de gerenciar estoque de loja de roupas   | sistema de treinamento de eportes competivivos | sistema de seleção de jogadores para um equipe de esportes |
+| habilidade destra  |   sistema de gerenciar estoque de loja de roupas   |sistema de treinamento de esportes competivivos | sistema de seleção de jogadores para um equipe de esportes |
 | endereço           |        gerenciamento de conteúdo de um blog        |                          sistema de e-commerce | sistema de entrega de comida a domicílio                   |
 | saldo em conta     |                    rede social                     |                          sistema de e-commerce | sistema bancário                                           |
 | etnia              | sistema de gerenciamento de estoque de um comércio |                       sistema de saúde pública | sistema de pesquisa genética                               |
