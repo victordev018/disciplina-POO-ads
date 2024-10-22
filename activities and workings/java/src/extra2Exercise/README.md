@@ -1,4 +1,4 @@
-# Excercício exta 02
+# Excercício extra 02:
 
 ## __Questão 01:__ Identifique o nome do conceito representado pelo texto abaixo:
 ### a) É a forma de definir ou controlar a complexidade baseada em características essenciais e pela supressão ou desconsideração de detalhes em orientação a objetos
@@ -20,8 +20,8 @@ escritos dentro ou fora da classe, como em C++;</span><br>
 >a. atributo, classe e objeto;<br>
 >b. classe, atributo e objeto;<br>
 >c. classe, objeto e atributo;<br>
->d. objeto, atributo e classe;<br>
-><span style="color: green">e. objeto, classe e atributo.</span>
+>d. objeto, atributo e classe; <br>
+><span style="color: green"> ---> e. objeto, classe e atributo. <---</span>
 
 ## __Questão 04:__ Dada a construção abaixo, associe os números ao elemento correspondente:
 
@@ -42,3 +42,8 @@ let conta : Conta = new Conta();
     deve deixar o valor ficar menor 0.
     d. Crie um método chamado lerVolume que retorna o valor do volume
 
+>[implementação da classe em typescript 😒](https://github.com/victordev018/POO-discipline-ads/blob/main/activities%20and%20workings/java/src/extra2Exercise/audioControlExercise/typescript/AudioControl.ts)
+
+## __Questão 07:__ Implemente a questão do ControleDeAudio acima em outra linguagem que não seja TypeScript.
+
+>[implementação da classe em Java ❤️😍](https://github.com/victordev018/POO-discipline-ads/blob/main/activities%20and%20workings/java/src/extra2Exercise/audioControlExercise/java/AudioControl.java)
