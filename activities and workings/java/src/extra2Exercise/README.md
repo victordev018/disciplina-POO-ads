@@ -44,6 +44,14 @@ let conta : Conta = new Conta();
 
 >[implementação da classe em typescript 😒](https://github.com/victordev018/POO-discipline-ads/blob/main/activities%20and%20workings/java/src/extra2Exercise/audioControlExercise/typescript/AudioControl.ts)
 
+## __Questão 06:__ Na questão sobre retângulos do exercício anterior, crie um método que retorna verdadeiro ou falso se o retângulo é um quadrado.
+````Java
+public Boolean rectangleIsASquare(){
+        return l1.equals(l2);
+}
+````
+> A função acima foi adicionada na classe Rectangle, confira clicando [aqui](https://github.com/victordev018/POO-discipline-ads/blob/main/activities%20and%20workings/java/src/extraExercise/rectangleProgram/entities/Rectangle.java)
+
 ## __Questão 07:__ Implemente a questão do ControleDeAudio acima em outra linguagem que não seja TypeScript.
 
 >[implementação da classe em Java ❤️😍](https://github.com/victordev018/POO-discipline-ads/blob/main/activities%20and%20workings/java/src/extra2Exercise/audioControlExercise/java/AudioControl.java)

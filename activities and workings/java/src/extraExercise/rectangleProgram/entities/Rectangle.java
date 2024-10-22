@@ -1,5 +1,7 @@
 package extraExercise.rectangleProgram.entities;
 
+import java.util.Objects;
+
 public class Rectangle {
 
     // attributes
@@ -37,5 +39,9 @@ public class Rectangle {
 
     public Double calculatePerimeter(){
         return 2 * (l1 + l2);
+    }
+
+    public Boolean rectangleIsASquare(){
+        return l1.equals(l2);
     }
 }
