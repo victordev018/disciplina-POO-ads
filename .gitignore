@@ -9,3 +9,7 @@
 *.obsidian
 
 /out
+
+*.js
+
+*.map
