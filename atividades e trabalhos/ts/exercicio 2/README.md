@@ -41,7 +41,7 @@ My payment time is 120.56
 and
 my preffered language is TypeScript
 
-> Link do código: [clique aqui]()
+> Link do código: [clique aqui](https://github.com/victordev018/POO-discipline-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%202/Teacher.ts)
 
 ## __Questão 07:__ Pesquise e configure o seu arquivo de configuração do TypeScript com as opções abaixo. Faça testes com as mudanças e perceba a diferença após a configuração.
 
@@ -56,4 +56,4 @@ veja como ela é transpilada para JS;
 * Configure um projeto seu para que seja possível realizar depuração
 alterando o atributo sourceMap .
 
-> Link para o arquivo `tsconfig.json`: [clique aqui]()
+> Link para o arquivo `tsconfig.json`: [clique aqui](https://github.com/victordev018/POO-discipline-ads/blob/main/atividades%20e%20trabalhos/ts/tsconfig.json)
