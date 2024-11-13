@@ -182,3 +182,11 @@ jogador concatenando todos os seus atributos.
 construtor. Utilize o método de ataque de cada jogador e ao final, verifique
 qual jogador tem mais pontos.
 
+> Link do código: [clique aqui](https://github.com/victordev018/POO-discipline-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%204/Player.ts)
+
+
+## __Questão 11:__ A abordagem da questão 9 é retornar códigos de erro ou acerto. Já a da questão 10 é desconsiderar a alteração. Quais das duas você acha mais correta? Compare com seus códigos escritos em outras disciplinas.
+
+> Para que o usuário tenha mais feedback controle sobre o status de suas operações, o mais apropriado seria a abordagem da questão 9
+> pois quando uma operação falhar, seja por alguma regra de negócio ou qualquer outro motivo, o usuário tenha ciência do ocorrido
+> e isso facilita seu entendimento e o ajuda a decidir as próximas operações a serem executadas.
