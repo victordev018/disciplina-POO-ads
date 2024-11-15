@@ -14,7 +14,7 @@
 >main();
 >```
 
-> Link para ver o código : [clique aqui]()
+> Link para ver o código : [clique aqui](https://github.com/victordev018/disciplina-POO-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%203/isEven.ts)
 
 ## __Questão 02:__ Crie uma função que receba como parâmetros um nome e um pronome de tratamento opcional. Caso esse último não seja fornecido, deve ser considerado o valor “Sr”. Ao final, imprima uma saudação semelhante a “Sra. Sávia”.
 
@@ -26,11 +26,11 @@
 >console.log(greeting("Ely"));   // Sr. Ely
 >```
 
-> Link para ver o código : [clique aqui]()
+> Link para ver o código : [clique aqui](https://github.com/victordev018/disciplina-POO-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%203/greeting.ts)
 
 ## __Questão 03:__ Crie uma função que retorne os números de um array passados por parâmetro separados por traço (-) no formato string. Para isso, use o método forEach dos arrays.
 
-> Link para ver o código : [clique aqui]()
+> Link para ver o código : [clique aqui](https://github.com/victordev018/disciplina-POO-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%203/questao3.ts)
 
 ## __Questão 04:__ Dada a função soma abaixo, tente executar os scripts das alternativas e exiba os eventuais resultados:
 
@@ -63,7 +63,7 @@ exibir(“a”, “b”, “c”, “d”);
 >}
 >```
 
-> Link para ver o código : [clique aqui]()
+> Link para ver o código : [clique aqui](https://github.com/victordev018/disciplina-POO-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%203/questao5.ts)
 
 ## __Questão 06:__ Converta em arrow function a seguinte função:
 
@@ -77,7 +77,7 @@ function ola(): void {
 >const hello = () => console.log("Hello");
 >```
 
-> Link para ver o código : [clique aqui]()
+> Link para ver o código : [clique aqui](https://github.com/victordev018/disciplina-POO-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%203/questao6.ts)
 
 ## __Questão 07:__ Dado método filter dos arrays, crie uma implementação usando arrow function que filtre todos os elementos pares do array abaixo:
 
@@ -92,8 +92,8 @@ const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 >}
 >```
 
-> Link para ver o código : [clique aqui]()
+> Link para ver o código : [clique aqui](https://github.com/victordev018/disciplina-POO-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%203/questao7.ts)
 
 ## __Questão 08:__ Crie um exemplo usando a função map para dobrar os elementos de um array e reduce para totalizar a soma dos elementos do array.
 
-> Link para ver o código : [clique aqui]()
+> Link para ver o código : [clique aqui](https://github.com/victordev018/disciplina-POO-ads/blob/main/atividades%20e%20trabalhos/ts/exercicio%203/questao8.ts)
