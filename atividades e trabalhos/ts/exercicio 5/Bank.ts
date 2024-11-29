@@ -24,19 +24,15 @@ class Bank {
 
     consultAccount(number: string): Account {
         let accountSearched!: Account;
-        accountSearched = this.accounts.filter( account => account.number === number)[0];
+        accountSearched = this.accounts.filter( account => account.number == number)[0];
         return accountSearched;
     }
 
     consultClient(cpf: string) : Client {
 
         let clientSearched!: Client;
-        clientSearched = this.clients.filter(client => client.cpf === cpf)[0];
+        clientSearched = this.clients.filter(client => client.cpf == cpf)[0];
         return clientSearched;
-    }
-
-    addClient(client: Client): void {
-        this.clients.push(client);
     }
 
     associateClientToAccount(numberAccount: string, cpfClient:string): void{
@@ -76,10 +72,12 @@ class Bank {
     }
 
     private cpfOrIdAlreadyExists(cpf:string, id:number) : boolean {
+        if(this.accounts.length == 0) return false;
         return this.clients.filter(client => client.cpf == cpf || client.id == id).length > 0
     }
     
     private numberOrIdAlreadyExists(numberAccount:string, id:number) : boolean {
+        if(this.clients.length == 0) return false;
         return this.accounts.filter(account => account.number == numberAccount || account.id == id).length > 0
     }
 
@@ -87,3 +85,5 @@ class Bank {
         return client.accounts.indexOf(account) != -1;
     }
 }
+
+export default Bank;

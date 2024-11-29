@@ -7,7 +7,7 @@ class Account {
     balance : number;
     client : Client;
 
-    constructor(number: string, balance : number){
+    constructor(id: number, number: string, balance : number){
         this.number = number;
         this.balance = balance;
     }
