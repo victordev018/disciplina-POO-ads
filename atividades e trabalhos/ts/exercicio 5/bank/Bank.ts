@@ -35,6 +35,85 @@ class Bank {
         return clientSearched;
     }
 
+    consultClientPerIndex(numberAccount: string) : number {
+        let indexWanted = -1, i;
+
+        for (i = 0; i < this.accounts.length; i++) {
+            if (this.accounts[i].number == numberAccount) {
+                indexWanted = i;
+                break;
+            }
+        }
+        return indexWanted;
+    }
+
+    delete(numberAccount: string) : void {
+
+        let index = this.consultClientPerIndex(numberAccount);
+
+        if(index != -1) {
+            for(let i = index; i < this.accounts.length-1; i++){
+                this.accounts[i] = this.accounts[i+1];
+            }
+            this.accounts.pop();
+        }
+    }
+
+    update(account: Account) : void {
+        const index = this.consultClientPerIndex(account.number);
+        if (index != null) {
+            this.accounts[index] = account;
+        }
+    }
+
+    withDraw(numberAccount: string, value:number) : void {
+        const index = this.consultClientPerIndex(numberAccount);
+        if (index != null) {
+            const account = this.accounts[index];
+            account.withdraw(value);
+        }
+    }
+
+    deposit(numberAccount: string, value:number) {
+        const index = this.consultClientPerIndex(numberAccount);
+        if (index != null) {
+            const account = this.accounts[index];
+            account.deposit(value);
+        }
+    }
+
+    transfer(numberAccountTarget:string, numberAccountDestiny:string, value:number) {
+        const indexTarget = this.consultClientPerIndex(numberAccountTarget);
+        const indexDestiny = this.consultClientPerIndex(numberAccountDestiny);
+
+        if(indexTarget != -1 && indexDestiny != -1) {
+            const accountTarget = this.accounts[indexTarget];
+            const accountDestiny = this.accounts[indexDestiny];
+            accountTarget.transfer(accountDestiny, value);
+        }
+    }
+
+    transferToListAccount(accounts: Account[], value:number) {
+        accounts.forEach((ac: Account) => {
+            ac.deposit(value);
+        });
+    }
+
+    quantityAccounts() : number {
+        return this.accounts.length;
+    }
+
+    totalBalance() : number {
+        const arrayBalances = this.accounts.map( ac => ac.balance);
+        const sumTotal = arrayBalances.reduce((sum, current) => sum += current);
+        return sumTotal;
+    }
+
+    averageBalance() : number {
+        const average = this.totalBalance() / this.quantityAccounts();
+        return average;
+    }
+
     associateClientToAccount(numberAccount: string, cpfClient:string): void{
         const accountSearched = this.consultAccount(numberAccount);
         const clientSearched = this.consultClient(cpfClient);
