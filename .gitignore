@@ -11,3 +11,7 @@
 /out
 
 *.map
+
+*node_modules
+
+*build

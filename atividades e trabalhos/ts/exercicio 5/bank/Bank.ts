@@ -5,34 +5,38 @@ class Bank {
 
     private accounts: Account[];
     private clients: Client[];
+    private currentAccountId: number;
+    private currentClientId: number;
 
     constructor() {
         this.accounts = [];
         this.clients = [];
+        this.currentAccountId = 0;
+        this.currentClientId = 0;
     }
 
     insertAccount(account: Account): void {
         const number = account.number;
-        const id = account.id;
+        account.id = ++this.currentAccountId;
 
-        if(this.numberOrIdAlreadyExists(number, id)){
+        if(this.numberOrIdAlreadyExists(number, account.id)){
             console.log("Account already exists");
             return;
         }
         this.accounts.push(account);
     }
 
-    consultAccount(number: string): Account {
-        let accountSearched!: Account;
-        accountSearched = this.accounts.filter( account => account.number == number)[0];
-        return accountSearched;
+    consultAccount(number: string): Account | null {
+        let accountSearched: Account[];
+        accountSearched = this.accounts.filter( account => account.number == number);
+        return accountSearched.length > 0 ? accountSearched[0] : null;
     }
 
-    consultClient(cpf: string) : Client {
+    consultClient(cpf: string) : Client | null {
 
-        let clientSearched!: Client;
-        clientSearched = this.clients.filter(client => client.cpf == cpf)[0];
-        return clientSearched;
+        let clientSearched: Client[];
+        clientSearched = this.clients.filter(client => client.cpf == cpf);
+        return clientSearched.length > 0 ? clientSearched[0] : null;
     }
 
     consultClientPerIndex(numberAccount: string) : number {
@@ -47,7 +51,7 @@ class Bank {
         return indexWanted;
     }
 
-    delete(numberAccount: string) : void {
+    delete(numberAccount: string) : boolean {
 
         let index = this.consultClientPerIndex(numberAccount);
 
@@ -56,7 +60,11 @@ class Bank {
                 this.accounts[i] = this.accounts[i+1];
             }
             this.accounts.pop();
+            return true;
         }
+
+        console.log(`Nao foi encontrada conta com o numero: ${numberAccount}`);
+        return false;
     }
 
     update(account: Account) : void {
@@ -66,20 +74,26 @@ class Bank {
         }
     }
 
-    withDraw(numberAccount: string, value:number) : void {
+    withDraw(numberAccount: string, value:number) : boolean {
         const index = this.consultClientPerIndex(numberAccount);
-        if (index != null) {
+        if (index != -1) {
             const account = this.accounts[index];
-            account.withdraw(value);
+            return account.withdraw(value);
         }
+        console.log(`Nao fou encontrada conta com o numero: ${numberAccount}`);
+        return false;
     }
 
-    deposit(numberAccount: string, value:number) {
+    deposit(numberAccount: string, value:number) : boolean {
         const index = this.consultClientPerIndex(numberAccount);
-        if (index != null) {
+        if (index != -1) {
             const account = this.accounts[index];
             account.deposit(value);
+            return true;
         }
+
+        console.log(`Nao fou encontrada conta com o numero: ${numberAccount}`);
+        return false;
     }
 
     transfer(numberAccountTarget:string, numberAccountDestiny:string, value:number) {
@@ -141,8 +155,8 @@ class Bank {
 
     insertClient(client: Client): void {
         const cpf = client.cpf;
-        const id = client.id;
-        if(this.cpfOrIdAlreadyExists(cpf, id)){
+        client.id = ++this.currentClientId;
+        if(this.cpfOrIdAlreadyExists(cpf, client.id)){
             console.log("Client already exists");
             return;
         }

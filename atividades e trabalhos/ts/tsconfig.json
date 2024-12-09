@@ -3,10 +3,10 @@
     "outDir": "./build",
     "allowUnreachableCode": true,
     "noImplicitAny": true,
-    "target": "ES5", 
+    "target": "ES2016", 
     "strictNullChecks": true,
-    "sourceMap": true
+    "sourceMap": true,
   },
   "include": ["./**/*.ts"], 
-  "exclude": ["./build"]     
+  "exclude": ["./build"] 
 }

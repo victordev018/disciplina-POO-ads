@@ -5,11 +5,12 @@ class Account {
     id: number;
     number : string;
     balance : number;
-    client : Client;
+    client! : Client;
 
-    constructor(id: number, number: string, balance : number){
+    constructor(number: string, balance: number){
+        this.id = 0;
         this.number = number;
-        this.balance = balance;
+        this.balance = balance; 
     }
 
     withdraw(amount : number) : boolean {
