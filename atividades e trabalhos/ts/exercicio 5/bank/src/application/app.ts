@@ -1,6 +1,7 @@
 import prompt from "prompt-sync";
 import Bank from "../entities/Bank";
 import Account from "../entities/Account";
+import Client from "../entities/Client";
 
 const input = prompt();
 let option = '';
@@ -40,6 +41,18 @@ function main() {
                 break;
             case "6":
                 transfer();
+                break;
+            case "7":
+                totalling();
+                break;
+            case "8":
+                insertClient();
+                break;
+            case "9":
+                consultClient();
+                break;
+            case "10":
+                associateClientToAccount();
                 break;
         }
         input("\nOperação finalizada. Pressione <Enter> para continuar.");
@@ -124,6 +137,85 @@ function transfer() : void {
     console.log(`\nFalha ao tranferir da conta: ${numberAccountTarget} para conta: ${numberAccountDestiny}`);
 }
 
+// 7 - totalling
+function totalling() : void {
+    console.log("\nTotalziacao:");
+    const total = bank.totalBalance();
+    console.log(`\nTotal R$ ${total.toFixed(2)}\n`);
+}
+
+// 8 - insert client in bank
+function insertClient() : void {
+    console.log("\nInserir cliente:\n");
+    const name = input("informe seu nome: ");
+    const cpf = input("informe seu cpf: ");
+    const birthDate : Date = getDate(input("data nascimento (dd/mm/aaa): "));
+    const client = new Client(name, cpf, birthDate);
+    if (bank.insertClient(client)) {
+        console.log("\nConta adicionada com sucesso!");
+        return;
+    }
+
+    console.log("\nFalha ao adicionar cliente");
+}
+
+// 9 - consult client
+function consultClient() : void {
+    console.log("\nConsultar cliente:\n");
+    const cpf = input("informe o cpf: ");
+    const client = bank.consultClient(cpf);
+
+    if (client != null) {
+        showInfoClient(client);
+        return;
+    }
+
+    console.log(`\nNao foi encontrado aluno de cpf ${cpf}`);
+}
+
+// 10 - associate client to acocunt
+function associateClientToAccount() : void {
+    console.log("\nAssociar conta a cliente\n");
+    const numberAccount = input("numero da conta: ");
+    const cpfClient = input("cpf cliente: ");
+
+    if (bank.associateClientToAccount(numberAccount, cpfClient)) {
+        console.log("\nAssociacao entre conta e cliente feita com sucesso!");
+        return;
+    }
+
+    console.log("\nFalha ao associar conta com o cliente");
+}
+
+// show information of the client
+function showInfoClient(client: Client) : void {
+    console.log("\n=== Dados do Cliente ===");
+    console.log(`ID: ${client.id}`);
+    console.log(`Nome: ${client.name}`);
+    console.log(`CPF: ${client.cpf}`);
+    console.log(`Data nascimento: ${formatDate(client.birthDate)}`);
+}
+
+// format output data to (dd/mm/yyyy)
+function formatDate(date: Date) : string {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    const dayStr = day < 10 ? `0${day}` : `${day}`;
+    const monthStr = month < 10 ? `0${month}` : `${month}`;
+
+    return dayStr+`/`+monthStr+`/${year}`;
+}
+
+// get date in formate dd/mm/aaaa
+function getDate(date: string) : Date {
+    const [day, month, year] = date.split("/").map( e => parseInt(e));
+    const birthDate = new Date();
+    birthDate.setFullYear(year, month-1, day);
+    return birthDate;
+}
+
 // show extract account
 function showExtract(numberAccount: string) : void {
     const account = bank.consultAccount(numberAccount);
@@ -134,11 +226,12 @@ function showExtract(numberAccount: string) : void {
         console.log(`Número da conta: ${account.number}`);
         console.log(`Saldo: ${account.balance}`);
 
-        if (client) {
+        if (client != null) {
             console.log("\n=== Dados do Cliente ===");
             console.log(`ID: ${client.id}`);
             console.log(`Nome: ${client.name}`);
             console.log(`CPF: ${client.cpf}`);
+            console.log(`Data nascimento: ${formatDate(client.birthDate)}`);
         } else {
             console.log("Cliente: Não associado.");
         }

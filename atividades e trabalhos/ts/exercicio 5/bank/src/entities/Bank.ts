@@ -141,14 +141,15 @@ class Bank {
         if (accountSearched && clientSearched) {
             // case account belongs to the client
             if(this.accountBelongsToTheClient(accountSearched, clientSearched)) {
-                console.log("Client already has this account");
+                console.log(`\nCliente de cpf ${cpfClient} ja possui conta de numero ${numberAccount}`);
                 return false;
             }
             clientSearched.accounts.push(accountSearched);
+            accountSearched.client = clientSearched;
             return true;
         }
 
-        console.log(`Conta de numero: ${numberAccount} ou cliente de cpf: ${cpfClient} nao encontrados`)
+        console.log(`\nConta de numero: ${numberAccount} ou cliente de cpf: ${cpfClient} nao encontrados`)
         return false;
     }
 
@@ -174,15 +175,16 @@ class Bank {
         return null;
     }
 
-    insertClient(client: Client): void {
+    insertClient(client: Client): boolean {
         const cpf = client.cpf;
         client.id = ++this.currentClientId;
         if(this.cpfOrIdAlreadyExists(cpf, client.id)){
-            console.log("Client already exists");
-            return;
+            console.log(`\nCliente de cpf ${cpf} ja esta cadastrado`);
+            return false;
         }
 
         this.clients.push(client);
+        return true;
     }
 
     private cpfOrIdAlreadyExists(cpf:string, id:number) : boolean {

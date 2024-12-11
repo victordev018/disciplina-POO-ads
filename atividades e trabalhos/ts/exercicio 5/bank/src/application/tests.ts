@@ -14,8 +14,8 @@ function main() : void {
     bank.insertAccount(new Account("100-4", 58));
 
     // insert two Clients
-    bank.insertClient(new Client(1, "John", "102.192.203-22", new Date()));
-    bank.insertClient(new Client(2, "Marcel", "123.027.371-11", new Date()));
+    bank.insertClient(new Client("John", "102.192.203-22", new Date()));
+    bank.insertClient(new Client("Marcel", "123.027.371-11", new Date()));
 
     // associate accounts
     bank.associateClientToAccount("100-3", "102.192.203-22");   // john
@@ -37,7 +37,7 @@ function main() : void {
     console.log("\nList account Marcel: ", listAccountMarcel);
 
     // trying to insert existing Client and Account
-    bank.insertClient(new Client(1, "John", "102.192.203-22", new Date()));     // error: client already exists
+    bank.insertClient(new Client("John", "102.192.203-22", new Date()));     // error: client already exists
     bank.insertAccount(new Account("100-1", 0));                             // error: account already exists
 
 }

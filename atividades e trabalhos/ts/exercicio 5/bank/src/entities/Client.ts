@@ -8,8 +8,8 @@ class Client {
     birthDate: Date;
     accounts: Account[];
 
-    constructor(id:number, name:string, cpf:string, birthDate: Date) {
-        this.id = id;
+    constructor(name:string, cpf:string, birthDate: Date) {
+        this.id = 0;
         this.name = name;
         this.cpf = cpf;
         this.birthDate = birthDate;
