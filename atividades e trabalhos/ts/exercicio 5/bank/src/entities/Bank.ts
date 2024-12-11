@@ -96,15 +96,19 @@ class Bank {
         return false;
     }
 
-    transfer(numberAccountTarget:string, numberAccountDestiny:string, value:number) {
+    transfer(numberAccountTarget:string, numberAccountDestiny:string, value:number) : boolean {
         const indexTarget = this.consultClientPerIndex(numberAccountTarget);
         const indexDestiny = this.consultClientPerIndex(numberAccountDestiny);
 
         if(indexTarget != -1 && indexDestiny != -1) {
             const accountTarget = this.accounts[indexTarget];
             const accountDestiny = this.accounts[indexDestiny];
-            accountTarget.transfer(accountDestiny, value);
+            const transferSuccessfully = accountTarget.transfer(accountDestiny, value);
+            return transferSuccessfully;
         }
+
+        console.log(`conta ${numberAccountTarget} ou conta ${numberAccountDestiny} nao encontrada `);
+        return false;
     }
 
     transferToListAccount(accounts: Account[], value:number) {

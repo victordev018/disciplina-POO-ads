@@ -1,6 +1,6 @@
 import prompt from "prompt-sync";
-import Bank from "./Bank";
-import Account from "./Account";
+import Bank from "../entities/Bank";
+import Account from "../entities/Account";
 
 const input = prompt();
 let option = '';
@@ -37,6 +37,9 @@ function main() {
                 break;
             case "5":
                 deleteAccount();
+                break;
+            case "6":
+                transfer();
                 break;
         }
         input("\nOperação finalizada. Pressione <Enter> para continuar.");
@@ -104,6 +107,23 @@ function deleteAccount() : void {
     console.log("\nFalha ao excluir conta");
 }
 
+// 6 - transfer
+function transfer() : void {
+    console.log("Tranferir dinheiro:");
+    const numberAccountTarget = input("numero de sua conta: ");
+    const numberAccountDestiny = input("numero conta destino: ")
+    const value = parseFloat(input("valor a ser tranferido: R$ "));
+
+    if (bank.transfer(numberAccountTarget, numberAccountDestiny, value)) {
+        console.log("\ndinheiro tranferido com sucesso!");
+        showExtract(numberAccountTarget);
+        showExtract(numberAccountDestiny);
+        return;
+    }
+
+    console.log(`\nFalha ao tranferir da conta: ${numberAccountTarget} para conta: ${numberAccountDestiny}`);
+}
+
 // show extract account
 function showExtract(numberAccount: string) : void {
     const account = bank.consultAccount(numberAccount);
@@ -124,7 +144,7 @@ function showExtract(numberAccount: string) : void {
         }
     }
     else {
-        console.log(`Nao foi encontrada conta com o numero: ${numberAccount}`);
+        console.log(`\nNao foi encontrada conta com o numero: ${numberAccount}`);
     }
 }
 

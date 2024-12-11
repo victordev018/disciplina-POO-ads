@@ -1,6 +1,6 @@
-import Account from "./Account";
-import Client from "./Client";
-import Bank from "./Bank";
+import Account from "../entities/Account";
+import Client from "../entities/Client";
+import Bank from "../entities/Bank";
 
 function main() : void {
 
@@ -8,10 +8,10 @@ function main() : void {
     const bank = new Bank();
 
     // insert four accounts in Bank
-    bank.insertAccount(new Account(1, "100-1", 0));
-    bank.insertAccount(new Account(2, "100-2", 200));
-    bank.insertAccount(new Account(3, "100-3", 1400));
-    bank.insertAccount(new Account(4, "100-4", 58));
+    bank.insertAccount(new Account("100-1", 0));
+    bank.insertAccount(new Account("100-2", 200));
+    bank.insertAccount(new Account("100-3", 1400));
+    bank.insertAccount(new Account("100-4", 58));
 
     // insert two Clients
     bank.insertClient(new Client(1, "John", "102.192.203-22", new Date()));
@@ -38,7 +38,7 @@ function main() : void {
 
     // trying to insert existing Client and Account
     bank.insertClient(new Client(1, "John", "102.192.203-22", new Date()));     // error: client already exists
-    bank.insertAccount(new Account(1, "100-1", 0));                             // error: account already exists
+    bank.insertAccount(new Account("100-1", 0));                             // error: account already exists
 
 }
 
