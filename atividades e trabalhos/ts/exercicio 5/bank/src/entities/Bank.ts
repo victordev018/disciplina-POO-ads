@@ -1,3 +1,4 @@
+import { cp } from "fs";
 import Account from "./Account";
 import Client from "./Client";
 
@@ -20,7 +21,7 @@ class Bank {
         account.id = ++this.currentAccountId;
 
         if(this.numberOrIdAlreadyExists(number, account.id)){
-            console.log("Account already exists");
+            console.log(`Conta de numero: ${number} ja está cadastrada`);
             return;
         }
         this.accounts.push(account);
@@ -132,29 +133,45 @@ class Bank {
         return average;
     }
 
-    associateClientToAccount(numberAccount: string, cpfClient:string): void{
+    associateClientToAccount(numberAccount: string, cpfClient:string): boolean {
         const accountSearched = this.consultAccount(numberAccount);
         const clientSearched = this.consultClient(cpfClient);
 
-        if(this.accountBelongsToTheClient(accountSearched, clientSearched)) {
-            console.log("Client already has this account");
-            return;
+        // case account and client exists
+        if (accountSearched && clientSearched) {
+            // case account belongs to the client
+            if(this.accountBelongsToTheClient(accountSearched, clientSearched)) {
+                console.log("Client already has this account");
+                return false;
+            }
+            clientSearched.accounts.push(accountSearched);
+            return true;
         }
 
-        clientSearched.accounts.push(accountSearched);
+        console.log(`Conta de numero: ${numberAccount} ou cliente de cpf: ${cpfClient} nao encontrados`)
+        return false;
     }
 
-    listAccountsFromClient(cpf: string) : Account[] {
+    listAccountsFromClient(cpf: string) : Account[] | null {
         const client = this.consultClient(cpf);
-        return client.accounts;
+        if (client != null)
+            return client.accounts;
+
+        console.log(`Nao foi encontrado cliente de cpf: ${cpf}`);
+        return null;
     }
 
-    totalClientBalance(cpfClient: string) : number {
+    totalClientBalance(cpfClient: string) : number | null {
         const client = this.consultClient(cpfClient);
-        const accounts = client.accounts;
-        const arrayBalances = accounts.map(account => account.balance);
-        const totalBalance = arrayBalances.reduce((previous, current) => previous+=current);
-        return totalBalance;
+        if ( client != null) {
+            const accounts = client.accounts;
+            const arrayBalances = accounts.map(account => account.balance);
+            const totalBalance = arrayBalances.reduce((previous, current) => previous+=current);
+            return totalBalance;
+        }
+
+        console.log(`Nao foi encontrado cliente de cpf: ${cpfClient}`);
+        return null;
     }
 
     insertClient(client: Client): void {
