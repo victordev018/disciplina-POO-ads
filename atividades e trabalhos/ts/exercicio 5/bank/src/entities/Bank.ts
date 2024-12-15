@@ -40,7 +40,7 @@ class Bank {
         return clientSearched.length > 0 ? clientSearched[0] : null;
     }
 
-    consultClientPerIndex(numberAccount: string) : number {
+    consultAccountPerIndex(numberAccount: string) : number {
         let indexWanted = -1, i;
 
         for (i = 0; i < this.accounts.length; i++) {
@@ -52,11 +52,30 @@ class Bank {
         return indexWanted;
     }
 
-    delete(numberAccount: string) : boolean {
+    consultClientPerIndex(cpfClient: string) : number {
+        let indexWanted = -1, i;
 
-        let index = this.consultClientPerIndex(numberAccount);
+        for (i = 0; i < this.clients.length; i++) {
+            if (this.clients[i].cpf == cpfClient) {
+                indexWanted = i;
+                break;
+            }
+        }
+        return indexWanted;
+    }
 
+    deleteAccount(numberAccount: string) : boolean {
+
+        let index = this.consultAccountPerIndex(numberAccount);
+        
         if(index != -1) {
+            // remove reference in client account list
+            const accountToRemove = this.consultAccount(numberAccount);
+            if (accountToRemove != null) {
+                const clientAssociated = accountToRemove?.client;
+                clientAssociated?.removeAccount(accountToRemove);
+            }
+
             for(let i = index; i < this.accounts.length-1; i++){
                 this.accounts[i] = this.accounts[i+1];
             }
@@ -64,7 +83,7 @@ class Bank {
             return true;
         }
 
-        console.log(`Nao foi encontrada conta com o numero: ${numberAccount}`);
+        console.log(`\nNao foi encontrada conta com o numero: ${numberAccount}`);
         return false;
     }
 
@@ -201,6 +220,34 @@ class Bank {
 
         console.log("\ncliente ou conta nao encontrado!");
         return false;
+    }
+
+    deleteClient(cpfClient: string) : boolean {
+        let index = this.consultClientPerIndex(cpfClient);
+        
+        if(index != -1) {
+            
+            // remove this client of the accounts
+            this.removeAllOccurrencesInAccounts(cpfClient);
+
+            for(let i = index; i < this.clients.length-1; i++){
+                this.clients[i] = this.clients[i+1];
+            }
+            this.clients.pop();
+
+            return true;
+        }
+
+        console.log(`\nNao foi encontrado usuario com o cpf: ${cpfClient}`);
+        return false;
+    }
+
+    private removeAllOccurrencesInAccounts(cpfClient: string) : void {
+        for (let account of this.accounts) {
+            if (account.client?.cpf == cpfClient) {
+                account.client = null;
+            }
+        }
     }
 
     private cpfOrIdAlreadyExists(cpf:string, id:number) : boolean {

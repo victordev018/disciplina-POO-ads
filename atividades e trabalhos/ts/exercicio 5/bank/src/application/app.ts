@@ -17,7 +17,7 @@ function main() {
     7 – Totalizações 8 - mudar titularidade\n
     Clientes:\n
     9 - Inserir 10 - Consultar 11 - Associar
-    0 - Sair\n
+    12 - deletar 0 - Sair\n
     `
     do {
         console.log(menu);
@@ -56,6 +56,9 @@ function main() {
                 break;
             case "11":
                 associateClientToAccount();
+                break;
+            case "12":
+                deleteClient();
                 break;
         }
         input("\nOperação finalizada. Pressione <Enter> para continuar.");
@@ -115,7 +118,7 @@ function deleteAccount() : void {
     console.log("Deletar conta:");
     const numberAccount = input("Numero da conta: ");
 
-    if (bank.delete(numberAccount)) {
+    if (bank.deleteAccount(numberAccount)) {
         console.log("\nConta deletada com sucesso");
         return;
     }
@@ -204,6 +207,19 @@ function associateClientToAccount() : void {
     }
 
     console.log("\nFalha ao associar conta com o cliente");
+}
+
+// 12 - delete client
+function deleteClient() : void {
+    console.log("\nDeletar cliente\n");
+
+    const cpfCliente = input("cpf cliente: ");
+    if (bank.deleteClient(cpfCliente)) {
+        console.log("\nCliente deletado com sucesso!");
+        return;
+    }
+
+    console.log("\nFalha ao deletar cliente!");
 }
 
 // show information of the client
