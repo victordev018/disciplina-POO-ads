@@ -250,6 +250,53 @@ class Bank {
 
     }
 
+    transferToAll(sourceNumberAccount: string, numberAccounts: string[], amount: number) : boolean {
+
+        // checking if source account exists
+        const sourceAccount = this.consultAccount(sourceNumberAccount);
+        if (sourceAccount == null) {
+            console.log(`\nConta de numero: ${sourceNumberAccount} nao encontrada.`);
+            return false;
+        }
+
+        // checking if all destiny accounts exists
+        const listWithNumbersAccountsBank = this.accounts.map(a => a.number);
+        for (let number of numberAccounts) {
+            // console.log("conta: ", number);
+            // console.log("list:", listWithNumbersAccountsBank);
+            if (!this.listHasValue(listWithNumbersAccountsBank, number)) {
+                console.log(`\nA conta numero ${number} nao foi encontrada.`)
+                return false;
+            }
+        }
+
+        // checking if source account has sufficient balance
+        const totalExpanse = numberAccounts.length * amount;
+        if (sourceAccount.balance < totalExpanse) {
+            console.log("\nSaldo insuficiente");
+            return false;
+        }
+
+        const listDestinyAccounts : Array<Account> = [];
+        for (let numberAccount of numberAccounts ) {
+            let currentAccount = this.consultAccount(numberAccount);
+            if (currentAccount != null)
+                listDestinyAccounts.push(currentAccount);
+        }
+        
+        this.transferToListAccount(listDestinyAccounts, amount);
+        sourceAccount.withdraw(totalExpanse);
+        return true;
+    }
+
+    private listHasValue(list: Array<any>, value: any) : boolean {
+        for (let currentValue of list) {
+            if (currentValue == value)
+                return true;
+        };
+        return false;
+    }
+
     private removeAllOccurrencesInAccounts(cpfClient: string) : void {
         for (let account of this.accounts) {
             if (account.client?.cpf == cpfClient) {

@@ -15,10 +15,11 @@ function main() {
     1 - Inserir 2 - Consultar 3 - Sacar
     4 - Depositar 5 - Excluir 6 - Transferir
     7 – Totalizações 8 - mudar titularidade
-    9 - Contas sem cliente\n
+    9 - Contas sem cliente 10 - tranferir para varias contas
+    \n
     Clientes:\n
-    10 - Inserir 11 - Consultar 12 - Associar
-    13 - deletar 0 - Sair\n
+    11 - Inserir 12 - Consultar 13 - Associar
+    14 - deletar 0 - Sair\n
     `
     do {
         console.log(menu);
@@ -53,15 +54,18 @@ function main() {
                 getAccountWithoutClient();
                 break;
             case "10":
-                insertClient();
+                transferToListAccount();
                 break;
             case "11":
-                consultClient();
+                insertClient();
                 break;
             case "12":
-                associateClientToAccount();
+                consultClient();
                 break;
             case "13":
+                associateClientToAccount();
+                break;
+            case "14":
                 deleteClient();
                 break;
         }
@@ -159,7 +163,23 @@ function totalling() : void {
     console.log(`\nTotal R$ ${total.toFixed(2)}\n`);
 }
 
-// get account without client
+// 8 - change account holder
+function changeAccountHolder() : void {
+    console.log("\nMudar titular de uma conta\n");
+
+    const numberAccount = input("numero da conta: ");
+    const cpfNewHolder = input("cpf novo titular: ");
+
+    if (bank.changeAccountHolder(numberAccount, cpfNewHolder)) {
+        showExtract(numberAccount);
+        console.log("\ntitular alterado com sucesso");
+        return;
+    }
+
+    console.log("\nFalha ao mudar titular da conta!");
+}
+
+// 9 - get account without client
 function getAccountWithoutClient() : void {
     console.log("\nContas sem clientes associados:\n");
     const accounts = bank.getAccountsWithoutClient();
@@ -183,23 +203,32 @@ function getAccountWithoutClient() : void {
     console.log("\nOperacao finalizada");
 }
 
-// 8 - change account holder
-function changeAccountHolder() : void {
-    console.log("\nMudar titular de uma conta\n");
+// 10 - transfer to list accounts
+function transferToListAccount() : void {
+    console.log("\nTransferir para uma lista de contas\n");
 
-    const numberAccount = input("numero da conta: ");
-    const cpfNewHolder = input("cpf novo titular: ");
+    const soucerAccount = input("numero da conta origem: ");
+    const amount = parseFloat(input("valor tranferencia: R$ "));
+    const numAccountsdestiny = parseInt(input("quantas contas destinos: "));
+    const numbersAccounts: string[] = [];
+    for (let i = 0; i < numAccountsdestiny; i++) {
+        let currentNumber = input(`${i+1}. numero conta: `);
+        numbersAccounts.push(currentNumber);
+    }
 
-    if (bank.changeAccountHolder(numberAccount, cpfNewHolder)) {
-        showExtract(numberAccount);
-        console.log("\ntitular alterado com sucesso");
+    if (bank.transferToAll(soucerAccount, numbersAccounts, amount)) {
+        console.log("\nTransferencias feitas com sucesso!");
+        console.log("\nExtrato conta origem:\n");
+        showExtract(soucerAccount);
+        console.log("\nExtrato das contas destinos:\n");
+        numbersAccounts.forEach((number) => showExtract(number));
         return;
     }
 
-    console.log("\nFalha ao mudar titular da conta!");
+    console.log("\nFalha na transferencia.");
 }
 
-// 10 - insert client in bank
+// 11 - insert client in bank
 function insertClient() : void {
     console.log("\nInserir cliente:\n");
     const name = input("informe seu nome: ");
@@ -214,7 +243,7 @@ function insertClient() : void {
     console.log("\nFalha ao adicionar cliente");
 }
 
-// 11 - consult client
+// 12 - consult client
 function consultClient() : void {
     console.log("\nConsultar cliente:\n");
     const cpf = input("informe o cpf: ");
@@ -228,7 +257,7 @@ function consultClient() : void {
     console.log(`\nNao foi encontrado aluno de cpf ${cpf}`);
 }
 
-// 12 - associate client to acocunt
+// 13 - associate client to acocunt
 function associateClientToAccount() : void {
     console.log("\nAssociar conta a cliente\n");
     const numberAccount = input("numero da conta: ");
@@ -242,7 +271,7 @@ function associateClientToAccount() : void {
     console.log("\nFalha ao associar conta com o cliente");
 }
 
-// 13 - delete client
+// 14 - delete client
 function deleteClient() : void {
     console.log("\nDeletar cliente\n");
 
