@@ -14,10 +14,11 @@ function main() {
     Contas:\n
     1 - Inserir 2 - Consultar 3 - Sacar
     4 - Depositar 5 - Excluir 6 - Transferir
-    7 – Totalizações 8 - mudar titularidade\n
+    7 – Totalizações 8 - mudar titularidade
+    9 - Contas sem cliente\n
     Clientes:\n
-    9 - Inserir 10 - Consultar 11 - Associar
-    12 - deletar 0 - Sair\n
+    10 - Inserir 11 - Consultar 12 - Associar
+    13 - deletar 0 - Sair\n
     `
     do {
         console.log(menu);
@@ -49,15 +50,18 @@ function main() {
                 changeAccountHolder();
                 break;
             case "9":
-                insertClient();
+                getAccountWithoutClient();
                 break;
             case "10":
-                consultClient();
+                insertClient();
                 break;
             case "11":
-                associateClientToAccount();
+                consultClient();
                 break;
             case "12":
+                associateClientToAccount();
+                break;
+            case "13":
                 deleteClient();
                 break;
         }
@@ -155,6 +159,30 @@ function totalling() : void {
     console.log(`\nTotal R$ ${total.toFixed(2)}\n`);
 }
 
+// get account without client
+function getAccountWithoutClient() : void {
+    console.log("\nContas sem clientes associados:\n");
+    const accounts = bank.getAccountsWithoutClient();
+
+    if (accounts.length > 0) {
+        for (let account of accounts) {
+            console.log(`[ id : ${account.id} numero: ${account.number}]\n`);
+        }
+        let resp: string;
+        do {
+            resp = input("\ndeseja associar alguma conta? (s/n): ");
+
+            if (resp == "s")
+                associateClientToAccount();
+
+        } while(resp != "n");
+    } else {
+        console.log("Nao ha contas sem cliente associado.");
+    }
+    
+    console.log("\nOperacao finalizada");
+}
+
 // 8 - change account holder
 function changeAccountHolder() : void {
     console.log("\nMudar titular de uma conta\n");
@@ -171,7 +199,7 @@ function changeAccountHolder() : void {
     console.log("\nFalha ao mudar titular da conta!");
 }
 
-// 9 - insert client in bank
+// 10 - insert client in bank
 function insertClient() : void {
     console.log("\nInserir cliente:\n");
     const name = input("informe seu nome: ");
@@ -186,7 +214,7 @@ function insertClient() : void {
     console.log("\nFalha ao adicionar cliente");
 }
 
-// 10 - consult client
+// 11 - consult client
 function consultClient() : void {
     console.log("\nConsultar cliente:\n");
     const cpf = input("informe o cpf: ");
@@ -200,7 +228,7 @@ function consultClient() : void {
     console.log(`\nNao foi encontrado aluno de cpf ${cpf}`);
 }
 
-// 11 - associate client to acocunt
+// 12 - associate client to acocunt
 function associateClientToAccount() : void {
     console.log("\nAssociar conta a cliente\n");
     const numberAccount = input("numero da conta: ");
@@ -214,7 +242,7 @@ function associateClientToAccount() : void {
     console.log("\nFalha ao associar conta com o cliente");
 }
 
-// 12 - delete client
+// 13 - delete client
 function deleteClient() : void {
     console.log("\nDeletar cliente\n");
 

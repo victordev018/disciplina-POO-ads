@@ -243,6 +243,13 @@ class Bank {
         return false;
     }
 
+    getAccountsWithoutClient() : Account[] {
+
+        const subList = this.accounts.filter(a => a.client == null);
+        return subList;
+
+    }
+
     private removeAllOccurrencesInAccounts(cpfClient: string) : void {
         for (let account of this.accounts) {
             if (account.client?.cpf == cpfClient) {
