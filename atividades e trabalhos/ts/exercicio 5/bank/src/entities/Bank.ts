@@ -187,6 +187,22 @@ class Bank {
         return true;
     }
 
+    changeAccountHolder(numberAccount: string, cpfNewClient: string) : boolean {
+        const newClient = this.consultClient(cpfNewClient);
+        const account = this.consultAccount(numberAccount);
+
+        if (account != null && newClient != null) {
+            const oldClient = account.client;
+            account.client = newClient;
+            newClient.addAccount(account);
+            oldClient?.removeAccount(account);
+            return true;
+        }
+
+        console.log("\ncliente ou conta nao encontrado!");
+        return false;
+    }
+
     private cpfOrIdAlreadyExists(cpf:string, id:number) : boolean {
         if(this.accounts.length == 0) return false;
         return this.clients.filter(client => client.cpf == cpf || client.id == id).length > 0
