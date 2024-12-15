@@ -74,8 +74,13 @@ function insertAccount(): void {
     let account: Account;
     let numberAccount: string = input('Digite o número da conta:');
     const initialBalance = parseFloat(input("Saldo inicial: R$ "));
-    bank.insertAccount(new Account(numberAccount, initialBalance));
-    console.log("\nConta cadastrada com sucesso!");
+    const newAccount = new Account(numberAccount, initialBalance);
+    if (bank.insertAccount(newAccount)) {
+        console.log("\nConta cadastrada com sucesso!");
+        return;
+    }
+
+    console.log("\nFalha ao criar nova conta!");
 }
 
 // 2 - consult account

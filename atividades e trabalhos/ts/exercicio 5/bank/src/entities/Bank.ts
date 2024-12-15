@@ -16,15 +16,16 @@ class Bank {
         this.currentClientId = 0;
     }
 
-    insertAccount(account: Account): void {
+    insertAccount(account: Account): boolean {
         const number = account.number;
         account.id = ++this.currentAccountId;
 
         if(this.numberOrIdAlreadyExists(number, account.id)){
-            console.log(`Conta de numero: ${number} ja está cadastrada`);
-            return;
+            console.log(`\nConta de numero: ${number} ja está cadastrada`);
+            return false;
         }
         this.accounts.push(account);
+        return true;
     }
 
     consultAccount(number: string): Account | null {
@@ -251,12 +252,12 @@ class Bank {
     }
 
     private cpfOrIdAlreadyExists(cpf:string, id:number) : boolean {
-        if(this.accounts.length == 0) return false;
+        if(this.clients.length == 0) return false;
         return this.clients.filter(client => client.cpf == cpf || client.id == id).length > 0
     }
     
     private numberOrIdAlreadyExists(numberAccount:string, id:number) : boolean {
-        if(this.clients.length == 0) return false;
+        if(this.accounts.length == 0) return false;
         return this.accounts.filter(account => account.number == numberAccount || account.id == id).length > 0
     }
 
