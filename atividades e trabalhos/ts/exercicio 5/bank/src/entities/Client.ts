@@ -2,11 +2,11 @@ import Account from "./Account";
 
 class Client {
 
-    id: number;
-    name: string;
-    cpf: string;
-    birthDate: Date;
-    accounts: Account[];
+    private id: number;
+    private name: string;
+    private cpf: string;
+    private birthDate: Date;
+    private accounts: Account[];
 
     constructor(name:string, cpf:string, birthDate: Date) {
         this.id = 0;
@@ -14,6 +14,39 @@ class Client {
         this.cpf = cpf;
         this.birthDate = birthDate;
         this.accounts = [];
+    }
+
+    // getters and setters
+    public getId() : number {
+        return this.id;
+    }
+
+    public setId(id : number) :void {
+        this.id = id;
+    }
+
+    public getName() : string {
+        return this.name;
+    }
+
+    public setName(name : string) :void {
+        this.name = name;
+    }
+
+    public getCpf() : string {
+        return this.cpf;
+    }
+
+    public setCpf(cpf : string) :void {
+        this.cpf = cpf;
+    }
+
+    public getBirthDate() : Date {
+        return this.birthDate;
+    }
+
+    public setBirthDate(birthDate : Date) :void {
+        this.birthDate = birthDate;
     }
 
     removeAccount(account: Account) : boolean {
@@ -28,6 +61,10 @@ class Client {
 
     addAccount(account: Account) : void {
         this.accounts.push(account);
+    }
+
+    getAccounts() : Account[] {
+        return this.accounts;
     }
 
     private deleteByIndex(index: number) : void {

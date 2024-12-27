@@ -36,7 +36,7 @@ class Bank {
     consultClient(cpf: string) : Client | null {
 
         let clientSearched: Client[];
-        clientSearched = this.clients.filter(client => client.cpf == cpf);
+        clientSearched = this.clients.filter(client => client.getCpf() == cpf);
         return clientSearched.length > 0 ? clientSearched[0] : null;
     }
 
@@ -56,7 +56,7 @@ class Bank {
         let indexWanted = -1, i;
 
         for (i = 0; i < this.clients.length; i++) {
-            if (this.clients[i].cpf == cpfClient) {
+            if (this.clients[i].getCpf() == cpfClient) {
                 indexWanted = i;
                 break;
             }
@@ -163,7 +163,7 @@ class Bank {
                 console.log(`\nCliente de cpf ${cpfClient} ja possui conta de numero ${numberAccount}`);
                 return false;
             }
-            clientSearched.accounts.push(accountSearched);
+            clientSearched.addAccount(accountSearched);
             accountSearched.client = clientSearched;
             return true;
         }
@@ -175,7 +175,7 @@ class Bank {
     listAccountsFromClient(cpf: string) : Account[] | null {
         const client = this.consultClient(cpf);
         if (client != null)
-            return client.accounts;
+            return client.getAccounts();
 
         console.log(`Nao foi encontrado cliente de cpf: ${cpf}`);
         return null;
@@ -184,7 +184,7 @@ class Bank {
     totalClientBalance(cpfClient: string) : number | null {
         const client = this.consultClient(cpfClient);
         if ( client != null) {
-            const accounts = client.accounts;
+            const accounts = client.getAccounts();
             const arrayBalances = accounts.map(account => account.balance);
             const totalBalance = arrayBalances.reduce((previous, current) => previous+=current);
             return totalBalance;
@@ -195,9 +195,9 @@ class Bank {
     }
 
     insertClient(client: Client): boolean {
-        const cpf = client.cpf;
-        client.id = ++this.currentClientId;
-        if(this.cpfOrIdAlreadyExists(cpf, client.id)){
+        const cpf = client.getCpf();
+        client.setId(++this.currentClientId);
+        if(this.cpfOrIdAlreadyExists(cpf, client.getId())){
             console.log(`\nCliente de cpf ${cpf} ja esta cadastrado`);
             return false;
         }
@@ -298,7 +298,7 @@ class Bank {
 
     private removeAllOccurrencesInAccounts(cpfClient: string) : void {
         for (let account of this.accounts) {
-            if (account.client?.cpf == cpfClient) {
+            if (account.client?.getCpf() == cpfClient) {
                 account.client = null;
             }
         }
@@ -306,7 +306,7 @@ class Bank {
 
     private cpfOrIdAlreadyExists(cpf:string, id:number) : boolean {
         if(this.clients.length == 0) return false;
-        return this.clients.filter(client => client.cpf == cpf || client.id == id).length > 0
+        return this.clients.filter(client => client.getCpf() == cpf || client.getId() == id).length > 0
     }
     
     private numberOrIdAlreadyExists(numberAccount:string, id:number) : boolean {
@@ -315,7 +315,7 @@ class Bank {
     }
 
     private accountBelongsToTheClient(account: Account, client: Client): boolean{
-        return client.accounts.indexOf(account) != -1;
+        return client.getAccounts().indexOf(account) != -1;
     }
 }
 
