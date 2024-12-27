@@ -40,7 +40,7 @@ class Bank {
         return clientSearched.length > 0 ? clientSearched[0] : null;
     }
 
-    consultAccountPerIndex(numberAccount: string) : number {
+    private consultAccountPerIndex(numberAccount: string) : number {
         let indexWanted = -1, i;
 
         for (i = 0; i < this.accounts.length; i++) {
@@ -52,7 +52,7 @@ class Bank {
         return indexWanted;
     }
 
-    consultClientPerIndex(cpfClient: string) : number {
+    private consultClientPerIndex(cpfClient: string) : number {
         let indexWanted = -1, i;
 
         for (i = 0; i < this.clients.length; i++) {
