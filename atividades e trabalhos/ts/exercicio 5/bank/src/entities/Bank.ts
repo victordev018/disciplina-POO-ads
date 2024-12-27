@@ -16,10 +16,10 @@ class Bank {
     }
 
     insertAccount(account: Account): boolean {
-        const number = account.number;
-        account.id = ++this.currentAccountId;
+        const number = account.getNumber();
+        account.setId(++this.currentAccountId);
 
-        if(this.numberOrIdAlreadyExists(number, account.id)){
+        if(this.numberOrIdAlreadyExists(number, account.getId())){
             console.log(`\nConta de numero: ${number} ja está cadastrada`);
             return false;
         }
@@ -29,7 +29,7 @@ class Bank {
 
     consultAccount(number: string): Account | null {
         let accountSearched: Account[];
-        accountSearched = this.accounts.filter( account => account.number == number);
+        accountSearched = this.accounts.filter( account => account.getNumber() == number);
         return accountSearched.length > 0 ? accountSearched[0] : null;
     }
 
@@ -44,7 +44,7 @@ class Bank {
         let indexWanted = -1, i;
 
         for (i = 0; i < this.accounts.length; i++) {
-            if (this.accounts[i].number == numberAccount) {
+            if (this.accounts[i].getNumber() == numberAccount) {
                 indexWanted = i;
                 break;
             }
@@ -72,7 +72,7 @@ class Bank {
             // remove reference in client account list
             const accountToRemove = this.consultAccount(numberAccount);
             if (accountToRemove != null) {
-                const clientAssociated = accountToRemove?.client;
+                const clientAssociated = accountToRemove?.getClient();
                 clientAssociated?.removeAccount(accountToRemove);
             }
 
@@ -88,7 +88,7 @@ class Bank {
     }
 
     update(account: Account) : void {
-        const index = this.consultClientPerIndex(account.number);
+        const index = this.consultClientPerIndex(account.getNumber());
         if (index != null) {
             this.accounts[index] = account;
         }
@@ -142,7 +142,7 @@ class Bank {
     }
 
     totalBalance() : number {
-        const arrayBalances = this.accounts.map( ac => ac.balance);
+        const arrayBalances = this.accounts.map( ac => ac.consultBalance());
         const sumTotal = arrayBalances.reduce((sum, current) => sum += current);
         return sumTotal;
     }
@@ -164,7 +164,7 @@ class Bank {
                 return false;
             }
             clientSearched.addAccount(accountSearched);
-            accountSearched.client = clientSearched;
+            accountSearched.setClient(clientSearched);
             return true;
         }
 
@@ -185,7 +185,7 @@ class Bank {
         const client = this.consultClient(cpfClient);
         if ( client != null) {
             const accounts = client.getAccounts();
-            const arrayBalances = accounts.map(account => account.balance);
+            const arrayBalances = accounts.map(account => account.consultBalance());
             const totalBalance = arrayBalances.reduce((previous, current) => previous+=current);
             return totalBalance;
         }
@@ -211,8 +211,8 @@ class Bank {
         const account = this.consultAccount(numberAccount);
 
         if (account != null && newClient != null) {
-            const oldClient = account.client;
-            account.client = newClient;
+            const oldClient = account.getClient();
+            account.setClient(newClient);
             newClient.addAccount(account);
             oldClient?.removeAccount(account);
             return true;
@@ -244,7 +244,7 @@ class Bank {
 
     getAccountsWithoutClient() : Account[] {
 
-        const subList = this.accounts.filter(a => a.client == null);
+        const subList = this.accounts.filter(a => a.getClient() == null);
         return subList;
 
     }
@@ -259,7 +259,7 @@ class Bank {
         }
 
         // checking if all destiny accounts exists
-        const listWithNumbersAccountsBank = this.accounts.map(a => a.number);
+        const listWithNumbersAccountsBank = this.accounts.map(a => a.getNumber());
         for (let number of numberAccounts) {
             // console.log("conta: ", number);
             // console.log("list:", listWithNumbersAccountsBank);
@@ -271,7 +271,7 @@ class Bank {
 
         // checking if source account has sufficient balance
         const totalExpanse = numberAccounts.length * amount;
-        if (sourceAccount.balance < totalExpanse) {
+        if (sourceAccount.consultBalance() < totalExpanse) {
             console.log("\nSaldo insuficiente");
             return false;
         }
@@ -298,8 +298,8 @@ class Bank {
 
     private removeAllOccurrencesInAccounts(cpfClient: string) : void {
         for (let account of this.accounts) {
-            if (account.client?.getCpf() == cpfClient) {
-                account.client = null;
+            if (account.getClient()?.getCpf() == cpfClient) {
+                account.setClient(null);
             }
         }
     }
@@ -311,7 +311,7 @@ class Bank {
     
     private numberOrIdAlreadyExists(numberAccount:string, id:number) : boolean {
         if(this.accounts.length == 0) return false;
-        return this.accounts.filter(account => account.number == numberAccount || account.id == id).length > 0
+        return this.accounts.filter(account => account.getNumber() == numberAccount || account.getId() == id).length > 0
     }
 
     private accountBelongsToTheClient(account: Account, client: Client): boolean{

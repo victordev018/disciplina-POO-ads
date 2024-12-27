@@ -77,7 +77,7 @@ class Client {
     private getIndexFromAccount(account: Account) {
         let index = -1;
         for (let i = 0; i < this.accounts.length; i++) {
-            if (this.accounts[i].number == account.number) {
+            if (this.accounts[i].getNumber() == account.getNumber()) {
                 index = i;
                 break;
             }

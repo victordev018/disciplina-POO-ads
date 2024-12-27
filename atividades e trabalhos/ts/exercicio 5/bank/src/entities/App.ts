@@ -139,7 +139,7 @@ class App {
 
         if (accounts.length > 0) {
             for (let account of accounts) {
-                console.log(`[ id : ${account.id} numero: ${account.number}]\n`);
+                console.log(`[ id : ${account.getId()} numero: ${account.getNumber()}]\n`);
             }
             let resp: string;
             do {
@@ -240,10 +240,10 @@ class App {
     // show information of the client
     showInfoClient(client: Client) : void {
         console.log("\n=== Dados do Cliente ===");
-        console.log(`ID: ${client.id}`);
-        console.log(`Nome: ${client.name}`);
-        console.log(`CPF: ${client.cpf}`);
-        console.log(`Data nascimento: ${this.formatDate(client.birthDate)}`);
+        console.log(`ID: ${client.getId()}`);
+        console.log(`Nome: ${client.getName()}`);
+        console.log(`CPF: ${client.getCpf()}`);
+        console.log(`Data nascimento: ${this.formatDate(client.getBirthDate())}`);
     }
 
     // format output data to (dd/mm/yyyy)
@@ -270,18 +270,18 @@ class App {
     showExtract(numberAccount: string) : void {
         const account = this.bank.consultAccount(numberAccount);
         if(account != null) {
-            const client = account.client;
+            const client = account.getClient();
             console.log("\n=== Extrato da Conta ===");
-            console.log(`ID: ${account.id}`);
-            console.log(`Número da conta: ${account.number}`);
-            console.log(`Saldo: ${account.balance}`);
+            console.log(`ID: ${account.getId()}`);
+            console.log(`Número da conta: ${account.getNumber()}`);
+            console.log(`Saldo: ${account.consultBalance()}`);
 
             if (client != null) {
                 console.log("\n=== Dados do Cliente ===");
-                console.log(`ID: ${client.id}`);
-                console.log(`Nome: ${client.name}`);
-                console.log(`CPF: ${client.cpf}`);
-                console.log(`Data nascimento: ${this.formatDate(client.birthDate)}`);
+                console.log(`ID: ${client.getId()}`);
+                console.log(`Nome: ${client.getName()}`);
+                console.log(`CPF: ${client.getCpf()}`);
+                console.log(`Data nascimento: ${this.formatDate(client.getBirthDate())}`);
             } else {
                 console.log("Cliente: Não associado.");
             }

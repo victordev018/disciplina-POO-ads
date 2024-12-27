@@ -2,10 +2,10 @@ import Client from "./Client";
 
 class Account {
 
-    id: number;
-    number : string;
-    balance : number;
-    client : Client | null;
+    private id: number;
+    private number : string;
+    private balance : number;
+    private client : Client | null;
 
     constructor(number: string, balance: number){
         this.id = 0;
@@ -14,6 +14,30 @@ class Account {
         this.client = null;
     }
 
+    // getters and setters
+    public getId() : number {
+        return this.id;
+    }
+
+    public setId(id: number) : void {
+        this.id = id;
+    }
+
+    public getNumber() : string {
+        return this.number;
+    }
+
+    public setNumber(number: string) : void {
+        this.number = number;
+    }
+
+    public getClient() : Client | null{
+        return this.client;
+    }
+
+    public setClient(client: Client | null) : void {
+        this.client = client;
+    }
     withdraw(amount : number) : boolean {
 
         if (amount > this.balance) return false;
