@@ -1,7 +1,7 @@
-class Calculator {
+export class Calculator {
 
-    private numberOne: number;
-    private numberTwo: number;
+    protected numberOne: number;
+    protected numberTwo: number;
 
     constructor(numberOne: number, numberTwo: number) {
         this.numberOne = numberOne;
@@ -20,7 +20,7 @@ function main() {
     const calc = new Calculator(5, 10);
     const sum = calc.sum();
 
-    console.log("sum: ", sum);
+    console.log("sum: ", sum);  
 }
 
 main();
