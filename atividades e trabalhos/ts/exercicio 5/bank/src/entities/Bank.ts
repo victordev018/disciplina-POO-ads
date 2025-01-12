@@ -1,5 +1,6 @@
 import Account from "./Account";
 import Client from "./Client";
+import { SavingsAccount } from "./SavingsAccount";
 
 class Bank {
 
@@ -286,6 +287,17 @@ class Bank {
         this.transferToListAccount(listDestinyAccounts, amount);
         sourceAccount.withdraw(totalExpanse);
         return true;
+    }
+
+    earnInterest(numberAccount : string) : boolean {
+        const accountSearched: Account | null = this.consultAccount(numberAccount);
+
+        if (accountSearched != null && accountSearched instanceof SavingsAccount) {
+            accountSearched.earnInterest();
+            return true;
+        }
+
+        return false;
     }
 
     private listHasValue(list: Array<any>, value: any) : boolean {

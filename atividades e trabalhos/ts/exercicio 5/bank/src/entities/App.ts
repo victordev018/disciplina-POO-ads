@@ -2,6 +2,7 @@ import prompt from "prompt-sync";
 import Account from "./Account";
 import Bank from "./Bank";
 import Client from "./Client";
+import { SavingsAccount } from "./SavingsAccount";
 
 const input = prompt();
 
@@ -21,10 +22,11 @@ class App {
         4 - Depositar 5 - Excluir 6 - Transferir
         7 – Totalizações 8 - mudar titularidade
         9 - Contas sem cliente 10 - tranferir para varias contas
+        11 - Render juros
         \n
         Clientes:\n
-        11 - Inserir 12 - Consultar 13 - Associar
-        14 - deletar 0 - Sair\n
+        12 - Inserir 13 - Consultar 14 - Associar
+        15 - deletar 0 - Sair\n
         `
         console.log(menu);
     }
@@ -32,16 +34,20 @@ class App {
     // 1 - insert account
     insertAccount(): void {
         console.log("\nCadastrar conta\n");
-        let account: Account;
-        let numberAccount: string = input('Digite o número da conta:');
-        const initialBalance = parseFloat(input("Saldo inicial: R$ "));
-        const newAccount = new Account(numberAccount, initialBalance);
-        if (this.bank.insertAccount(newAccount)) {
-            console.log("\nConta cadastrada com sucesso!");
-            return;
-        }
 
-        console.log("\nFalha ao criar nova conta!");
+        const typeAccount: string = input("Conta Corrente ou Poupanca (C/P): ");
+        const numberAccount: string = input('Digite o número da conta:');
+        const initialBalance = parseFloat(input("Saldo inicial: R$ "));
+
+        if (typeAccount.toUpperCase() === "C") {
+            this.bank.insertAccount(new Account(numberAccount, initialBalance));
+        }
+        else {
+            const interestRate: number = parseFloat(input("Informe a taxa de juros: "));
+            this.bank.insertAccount(new SavingsAccount(numberAccount, initialBalance, interestRate));
+        }
+        
+        console.log("\nConta cadastrada com sucesso!");
     }
 
     // 2 - consult account
@@ -181,7 +187,22 @@ class App {
         console.log("\nFalha na transferencia.");
     }
 
-    // 11 - insert client in this.bank
+    // 11 - earn interest
+    earnInterest() : void {
+        console.log("Render juros");
+
+        const numberAccount: string = input("numero da conta: ");
+
+        if (this.bank.earnInterest(numberAccount)) {
+            console.log("Sucesso ao render juros!");
+            this.showExtract(numberAccount);
+            return;
+        }
+
+        console.log("Falha ao render juros...");
+    }
+
+    // 12 - insert client in this.bank
     insertClient() : void {
         console.log("\nInserir cliente:\n");
         const name = input("informe seu nome: ");
@@ -196,7 +217,7 @@ class App {
         console.log("\nFalha ao adicionar cliente");
     }
 
-    // 12 - consult client
+    // 13 - consult client
     consultClient() : void {
         console.log("\nConsultar cliente:\n");
         const cpf = input("informe o cpf: ");
@@ -210,7 +231,7 @@ class App {
         console.log(`\nNao foi encontrado aluno de cpf ${cpf}`);
     }
 
-    // 13 - associate client to acocunt
+    // 14 - associate client to acocunt
     associateClientToAccount() : void {
         console.log("\nAssociar conta a cliente\n");
         const numberAccount = input("numero da conta: ");
@@ -224,7 +245,7 @@ class App {
         console.log("\nFalha ao associar conta com o cliente");
     }
 
-    // 14 - delete client
+    // 15 - delete client
     deleteClient() : void {
         console.log("\nDeletar cliente\n");
 

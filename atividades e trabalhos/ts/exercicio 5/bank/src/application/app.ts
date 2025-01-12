@@ -45,15 +45,18 @@ function main() {
                 app.transferToListAccount();
                 break;
             case "11":
-                app.insertClient();
+                app.earnInterest();
                 break;
             case "12":
-                app.consultClient();
+                app.insertClient();
                 break;
             case "13":
-                app.associateClientToAccount();
+                app.consultClient();
                 break;
             case "14":
+                app.associateClientToAccount();
+                break;
+            case "15":
                 app.deleteClient();
                 break;
         }
