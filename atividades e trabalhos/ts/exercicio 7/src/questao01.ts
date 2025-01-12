@@ -2,23 +2,24 @@ class Vehicle {
 
     private plate: string;
     private year: number;
-    private model: string;
 
-    constructor(plate: string, year: number, model: string) {
+    constructor(plate: string, year: number) {
         this.plate = plate;
         this.year = year;
-        this.model = model;
     }
 }
 
 class Car extends Vehicle {
+
+    private model: string;
     
     constructor(plate: string, year: number, model: string) {
-        super(plate, year, model);
+        super(plate, year);
+        this.model = model;
     }
 }
 
-class ElectricCar extends Vehicle {
+class ElectricCar extends Car {
     
     private batteryLife: number;
 
