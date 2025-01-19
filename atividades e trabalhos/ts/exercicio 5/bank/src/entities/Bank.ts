@@ -16,6 +16,10 @@ class Bank {
         this.currentClientId = 0;
     }
 
+    getListAccounts() : Array<Account> {
+        return this.accounts;
+    }
+
     insertAccount(account: Account): boolean {
         const number = account.getNumber();
         account.setId(++this.currentAccountId);

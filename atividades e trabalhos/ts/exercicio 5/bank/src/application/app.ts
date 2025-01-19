@@ -59,6 +59,9 @@ function main() {
             case "15":
                 app.deleteClient();
                 break;
+            case "16":
+                app.saveAccountsInFile();
+                break;
         }
         input("\nOperação finalizada. Pressione <Enter> para continuar.");
 

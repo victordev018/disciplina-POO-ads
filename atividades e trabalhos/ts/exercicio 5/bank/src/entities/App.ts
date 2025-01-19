@@ -4,6 +4,7 @@ import Bank from "./Bank";
 import Client from "./Client";
 import { SavingsAccount } from "./SavingsAccount";
 import { TaxAccount } from "./TaxAccount";
+import { FileHandler } from "./FileHandler";
 
 const input = prompt();
 
@@ -19,15 +20,21 @@ class App {
         const menu = `
         \nBem vindo\nDigite uma opção:\n
         Contas:\n
-        1 - Inserir 2 - Consultar 3 - Sacar
-        4 - Depositar 5 - Excluir 6 - Transferir
-        7 – Totalizações 8 - mudar titularidade
-        9 - Contas sem cliente 10 - tranferir para varias contas
+        1 - Inserir              2 - Consultar          3 - Sacar
+        4 - Depositar            5 - Excluir            6 - Transferir
+        7 – Totalizações         8 - mudar titularidade
+        9 - Contas sem cliente  10 - tranferir para varias contas
         11 - Render juros
-        \n
+        
         Clientes:\n
-        12 - Inserir 13 - Consultar 14 - Associar
-        15 - deletar 0 - Sair\n
+        12 - Inserir    13 - Consultar 
+        14 - Associar   15 - deletar
+        
+        Persistência e Recuperacao de Dados:\n
+        16 - Salvar contas
+        
+        Sistema:\n
+        0 - Sair
         `
         console.log(menu);
     }
@@ -38,7 +45,7 @@ class App {
 
         const numberAccount: string = input('Digite o número da conta:');
         const initialBalance = parseFloat(input("Saldo inicial: R$ "));
-        const typeAccount: string = input("Tipo de conta (1 - Conta, 2 - Poupança, 3 - Imposto) ");
+        const typeAccount: string = input("Tipo de conta (1 - Conta, 2 - Poupança, 3 - Imposto): ");
     
         if (typeAccount === "1") {
             this.bank.insertAccount(new Account(numberAccount, initialBalance));
@@ -260,6 +267,60 @@ class App {
         }
 
         console.log("\nFalha ao deletar cliente!");
+    }
+
+    // 16 - save array of accounts in file
+    saveAccountsInFile() : void {
+        const accounts : Array<Account> = this.bank.getListAccounts();
+        const fileHandler : FileHandler = new FileHandler();
+        let data: string = "";
+
+        if (accounts.length == 0) {
+            console.log("Sem contas no banco!");
+            return;
+        }
+
+        // case has accounts
+        for (const account of accounts) {
+            let {typeAccount, id, numberAccount, balance, client, interestRate} = this.getAllDataFromAccount(account);
+            // case account is Savings Account
+            if (interestRate != undefined){
+                data += `${typeAccount};${id};${numberAccount};${balance};${client? client.getCpf() : null};${interestRate}\n`;
+                continue;
+            }
+            data += `${typeAccount};${id};${numberAccount};${balance};${client? client.getCpf() : null}\n`;
+        }
+
+        fileHandler.writeInFile("../../saves/accounts.txt", data);
+        console.log("\nDados salvos com sucesso!\n");
+    }
+
+    // get all data from account
+    getAllDataFromAccount(account: Account) {
+        let typeAccount : string = this.getTypeAccount(account);
+        let id : number = account.getId();
+        let numberAccount : string = account.getNumber();
+        let balance : number = account.consultBalance();
+        let client : Client | null = account.getClient();
+        let interestRate!: number;
+        // if account is SavingsAccount, get interest Rate
+        if (typeAccount == "CP") {
+            interestRate = (account as SavingsAccount).getInterestRate();
+        }
+
+        return {typeAccount, id, numberAccount, balance, client, interestRate};
+    } 
+
+    // get type account
+    private getTypeAccount(account : Account) : string {
+        let type = "C";
+        if (account instanceof SavingsAccount){
+            type = "CP";
+        }
+        else if(account instanceof TaxAccount) {
+            type = "CI";
+        }
+        return type;
     }
 
     // show information of the client

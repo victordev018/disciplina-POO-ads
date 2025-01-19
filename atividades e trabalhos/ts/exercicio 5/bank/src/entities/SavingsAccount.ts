@@ -9,6 +9,10 @@ export class SavingsAccount extends Account {
         this.interestRate = interestRate;
     }
 
+    getInterestRate() : number {
+        return this.interestRate;
+    }
+
     public earnInterest() : void {
         let interest: number = this.consultBalance() * this.interestRate / 100;
         this.deposit(interest);
