@@ -1,4 +1,4 @@
-import { writeFileSync, mkdirSync, existsSync } from "fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { resolve, dirname } from "path";
 
 export class FileHandler {
@@ -15,5 +15,10 @@ export class FileHandler {
 
         // Write to the file
         writeFileSync(filePath, data);
+    }
+
+    public readFile(file: string) {
+        const data = readFileSync(file, {encoding:"utf-8", flag:'r'});
+        return data;
     }
 }

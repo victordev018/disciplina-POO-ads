@@ -11,9 +11,11 @@ const input = prompt();
 class App {
 
     private bank: Bank;
+    private fileHandler: FileHandler;
 
     constructor (bank: Bank) {
         this.bank = bank;
+        this.fileHandler = new FileHandler();
     }
 
     showMenu() : void {
@@ -31,7 +33,7 @@ class App {
         14 - Associar   15 - deletar
         
         Persistência e Recuperacao de Dados:\n
-        16 - Salvar contas
+        16 - Salvar contas      17 - Recuperar contas salvas
         
         Sistema:\n
         0 - Sair
@@ -272,7 +274,6 @@ class App {
     // 16 - save array of accounts in file
     saveAccountsInFile() : void {
         const accounts : Array<Account> = this.bank.getListAccounts();
-        const fileHandler : FileHandler = new FileHandler();
         let data: string = "";
 
         if (accounts.length == 0) {
@@ -284,15 +285,101 @@ class App {
         for (const account of accounts) {
             let {typeAccount, id, numberAccount, balance, client, interestRate} = this.getAllDataFromAccount(account);
             // case account is Savings Account
-            if (interestRate != undefined){
+            if (typeAccount == "CP"){
                 data += `${typeAccount};${id};${numberAccount};${balance};${client? client.getCpf() : null};${interestRate}\n`;
                 continue;
             }
             data += `${typeAccount};${id};${numberAccount};${balance};${client? client.getCpf() : null}\n`;
         }
 
-        fileHandler.writeInFile("../../saves/accounts.txt", data);
+        this.saveClientsInFile();
+
+        this.fileHandler.writeInFile("../../saves/accounts.txt", data);
         console.log("\nDados salvos com sucesso!\n");
+    }
+
+    // function to save client data in file
+    saveClientsInFile() : void {
+        const clients : Array<Client> = this.bank.getListClients();
+        let data: string = "";
+
+        if (clients.length == 0) {
+            // console.log("Sem clientes no banco!");
+            return;
+        }
+
+        // case has clients
+        for (const client of clients) {
+            let {id, name, cpf, birthDate} = this.getAllDataFromClient(client);
+            data += `${id};${name};${cpf};${this.formatDate(birthDate)}\n`;
+        }
+
+        this.fileHandler.writeInFile("../../saves/clients.txt", data);
+        // console.log("\nDados salvos com sucesso!\n");
+    }
+
+    // 17 - recover saved accounts
+    recoverAccounts() : void {
+        // get all data
+        const data : string = this.fileHandler.readFile("../../saves/accounts.txt");
+
+        // check if has data
+        if (data.length == 0) {
+            console.log("\nSem dados salvos...");
+            return;
+        }
+
+        // recover clients
+        this.recoverClients();
+
+        // saves each line as an element of an array
+        const lines : Array<string> = data.split("\n");
+        lines.pop();    // last line is empty
+
+        // process lines
+        for (const line of lines) {
+            const elements : Array<string> = line.split(';');
+            let [typeAcc, idAcc, numAcc, balance, cpfClient, interestRate] = elements;
+            // check if account is Savings Account
+            if (typeAcc == "CP") {
+                this.bank.insertAccount(new SavingsAccount(numAcc, parseFloat(balance), parseFloat(interestRate)));
+            } else if(typeAcc == "CI") {    // if type account is Tax Account
+                this.bank.insertAccount(new TaxAccount(numAcc, parseFloat(balance)));
+            } else {
+                this.bank.insertAccount(new Account(numAcc, parseFloat(balance)));
+            }
+
+            // check if account has owner
+            if (cpfClient != "null") {
+                const client : Client | null = this.bank.consultClient(cpfClient);
+                (client != null ? this.bank.associateClientToAccount(numAcc, cpfClient) : console.log("cliente não existe"));
+            }
+        }
+
+        console.log("\nDados recuperados com sucesso!");
+    }
+
+    // function to recover clients
+    recoverClients() : void {
+        // get all data
+        const data : string = this.fileHandler.readFile("../../saves/clients.txt");
+
+        // check if has data
+        if (data.length == 0) {
+            // console.log("\nSem dados Salvos...");
+            return;
+        }
+
+        // saves each line as an element of an array
+        const lines : Array<string> = data.split("\n");
+        lines.pop();    // last line is empty
+
+        // process lines
+        for (const line of lines) {
+            const elements : Array<string> = line.split(';');
+            let [id, name, cpf, birthDate] = elements;
+            this.bank.insertClient(new Client(name, cpf, this.getDate(birthDate)));
+        }
     }
 
     // get all data from account
@@ -310,6 +397,15 @@ class App {
 
         return {typeAccount, id, numberAccount, balance, client, interestRate};
     } 
+
+    // get all data from client
+    getAllDataFromClient(client : Client) {
+        const id: number = client.getId();
+        const name: string = client.getName();
+        const cpf: string = client.getCpf();
+        const birthDate: Date = client.getBirthDate();
+        return {id, name, cpf, birthDate};
+    }
 
     // get type account
     private getTypeAccount(account : Account) : string {

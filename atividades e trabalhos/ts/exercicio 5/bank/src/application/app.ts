@@ -62,6 +62,9 @@ function main() {
             case "16":
                 app.saveAccountsInFile();
                 break;
+            case "17":
+                app.recoverAccounts();
+                break;
         }
         input("\nOperação finalizada. Pressione <Enter> para continuar.");
 
