@@ -5,6 +5,7 @@ import Client from "./Client";
 import { SavingsAccount } from "./SavingsAccount";
 import { TaxAccount } from "./TaxAccount";
 import { FileHandler } from "./FileHandler";
+import { InvestmentAccount } from "./InvestmentAccount";
 
 const input = prompt();
 
@@ -26,7 +27,7 @@ class App {
         4 - Depositar            5 - Excluir            6 - Transferir
         7 – Totalizações         8 - mudar titularidade
         9 - Contas sem cliente  10 - tranferir para varias contas
-        11 - Render juros
+        11 - Render juros        I - aplicar rendimento conta Investimento
         
         Clientes:\n
         12 - Inserir    13 - Consultar 
@@ -47,7 +48,7 @@ class App {
 
         const numberAccount: string = input('Digite o número da conta:');
         const initialBalance = parseFloat(input("Saldo inicial: R$ "));
-        const typeAccount: string = input("Tipo de conta (1 - Conta, 2 - Poupança, 3 - Imposto): ");
+        const typeAccount: string = input("Tipo de conta (1 - Conta, 2 - Poupança, 3 - Investimento, 4 - Imposto): ");
     
         if (typeAccount === "1") {
             this.bank.insertAccount(new Account(numberAccount, initialBalance));
@@ -55,6 +56,10 @@ class App {
         else if (typeAccount === "2") {
             const interestRate: number = parseFloat(input("Informe a taxa de juros: "));
             this.bank.insertAccount(new SavingsAccount(numberAccount, initialBalance, interestRate));
+        }
+        else if (typeAccount === "3") {
+            const incomeRate : number = parseFloat(input("Informe a taxa de rendimento: "));
+            this.bank.insertAccount(new InvestmentAccount(numberAccount, initialBalance, incomeRate));
         }
         else {
             this.bank.insertAccount(new TaxAccount(numberAccount, initialBalance));
@@ -213,6 +218,21 @@ class App {
         }
 
         console.log("Falha ao render juros...");
+    }
+
+    // I - apply income
+    applyIncome() : void {
+        console.log("\nAplicar rendimento");
+
+        const numberAccount : string = input("\nnumero da conta: ");
+
+        if (this.bank.applyIncome(numberAccount)) {
+            console.log("\nSucesso ao aplicar rendimento");
+            this.showExtract(numberAccount);
+            return;
+        }
+
+        console.log("\nFalha ao aplicar rendimento");
     }
 
     // 12 - insert client in this.bank

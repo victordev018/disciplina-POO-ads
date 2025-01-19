@@ -47,6 +47,9 @@ function main() {
             case "11":
                 app.earnInterest();
                 break;
+            case "I":
+                app.applyIncome();
+                break;
             case "12":
                 app.insertClient();
                 break;

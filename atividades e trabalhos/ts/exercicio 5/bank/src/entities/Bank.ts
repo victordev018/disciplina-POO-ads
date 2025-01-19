@@ -1,5 +1,6 @@
 import Account from "./Account";
 import Client from "./Client";
+import { InvestmentAccount } from "./InvestmentAccount";
 import { SavingsAccount } from "./SavingsAccount";
 
 class Bank {
@@ -302,6 +303,17 @@ class Bank {
 
         if (accountSearched != null && accountSearched instanceof SavingsAccount) {
             accountSearched.earnInterest();
+            return true;
+        }
+
+        return false;
+    }
+
+    applyIncome(numberAccount: string) : boolean {
+        const accountSearched : Account | null = this.consultAccount(numberAccount);
+
+        if (accountSearched != null && accountSearched instanceof InvestmentAccount) {
+            accountSearched.applyIncome();
             return true;
         }
 
