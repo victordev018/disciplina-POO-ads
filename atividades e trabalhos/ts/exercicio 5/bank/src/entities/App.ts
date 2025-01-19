@@ -3,6 +3,7 @@ import Account from "./Account";
 import Bank from "./Bank";
 import Client from "./Client";
 import { SavingsAccount } from "./SavingsAccount";
+import { TaxAccount } from "./TaxAccount";
 
 const input = prompt();
 
@@ -35,16 +36,19 @@ class App {
     insertAccount(): void {
         console.log("\nCadastrar conta\n");
 
-        const typeAccount: string = input("Conta Corrente ou Poupanca (C/P): ");
         const numberAccount: string = input('Digite o número da conta:');
         const initialBalance = parseFloat(input("Saldo inicial: R$ "));
-
-        if (typeAccount.toUpperCase() === "C") {
+        const typeAccount: string = input("Tipo de conta (1 - Conta, 2 - Poupança, 3 - Imposto) ");
+    
+        if (typeAccount === "1") {
             this.bank.insertAccount(new Account(numberAccount, initialBalance));
         }
-        else {
+        else if (typeAccount === "2") {
             const interestRate: number = parseFloat(input("Informe a taxa de juros: "));
             this.bank.insertAccount(new SavingsAccount(numberAccount, initialBalance, interestRate));
+        }
+        else {
+            this.bank.insertAccount(new TaxAccount(numberAccount, initialBalance));
         }
         
         console.log("\nConta cadastrada com sucesso!");
@@ -295,7 +299,7 @@ class App {
             console.log("\n=== Extrato da Conta ===");
             console.log(`ID: ${account.getId()}`);
             console.log(`Número da conta: ${account.getNumber()}`);
-            console.log(`Saldo: ${account.consultBalance()}`);
+            console.log(`Saldo: ${account.consultBalance().toFixed(2)}`);
 
             if (client != null) {
                 console.log("\n=== Dados do Cliente ===");

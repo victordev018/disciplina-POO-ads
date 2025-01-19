@@ -96,7 +96,7 @@ class Bank {
     }
 
     withDraw(numberAccount: string, value:number) : boolean {
-        const index = this.consultClientPerIndex(numberAccount);
+        const index = this.consultAccountPerIndex(numberAccount);
         if (index != -1) {
             const account = this.accounts[index];
             return account.withdraw(value);
