@@ -8,6 +8,7 @@ class Account {
     private client : Client | null;
 
     constructor(number: string, balance: number){
+        this.validateValue(balance);
         this.id = 0;
         this.number = number;
         this.balance = balance;
@@ -39,8 +40,8 @@ class Account {
         this.client = client;
     }
     withdraw(amount : number) : boolean {
-
-        if (amount > this.balance) return false;
+        this.validateValue(amount);
+        if (amount > this.balance) throw new Error("Insufficient balance");
 
         this.balance -= amount;
         return true;
@@ -55,11 +56,15 @@ class Account {
     }
 
     transfer(destiny :Account, amount : number) : boolean {
+        this.validateValue(amount);
         if(!this.withdraw(amount)) return false;
         destiny.deposit(amount);
         return true;
     }
 
+    private validateValue(value: number) {
+        if (value <= 0) throw new Error("Invalid value, must be greater than zero");
+    }
 }
 
 export default Account;
