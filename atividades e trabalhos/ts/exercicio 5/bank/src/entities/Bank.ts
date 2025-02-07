@@ -1,3 +1,9 @@
+import { AlreadyExists } from "../exceptions/AlreadyExists";
+import { ClientAlreadyHasAccount } from "../exceptions/ClientAlreadyHasAccount";
+import { ClientNotFoundError } from "../exceptions/ClientNotFoundError";
+import { InsufficientBalanceError } from "../exceptions/InsufficientBalanceError";
+import { NonExistentAccountError } from "../exceptions/NonExistentAccountError";
+import { UnauthorizedError } from "../exceptions/UnauthorizedError";
 import Account from "./Account";
 import Client from "./Client";
 import { InvestmentAccount } from "./InvestmentAccount";
@@ -37,17 +43,23 @@ class Bank {
         return true;
     }
 
-    consultAccount(number: string): Account | null {
+    consultAccount(number: string): Account {
         let accountSearched: Account[];
         accountSearched = this.accounts.filter( account => account.getNumber() == number);
-        return accountSearched.length > 0 ? accountSearched[0] : null;
+        if (accountSearched.length > 0) {
+            return accountSearched[0];
+        }
+        throw new NonExistentAccountError("Conta não encontrada com numero: " + number);
     }
 
-    consultClient(cpf: string) : Client | null {
+    consultClient(cpf: string) : Client {
 
         let clientSearched: Client[];
         clientSearched = this.clients.filter(client => client.getCpf() == cpf);
-        return clientSearched.length > 0 ? clientSearched[0] : null;
+        if (clientSearched.length > 0) {
+            return clientSearched[0];
+        }
+        throw new ClientNotFoundError("Cliente não encontrado com cpf: " + cpf);
     }
 
     private consultAccountPerIndex(numberAccount: string) : number {
@@ -59,7 +71,10 @@ class Bank {
                 break;
             }
         }
-        return indexWanted;
+        if (indexWanted != -1)
+            return indexWanted;
+
+        throw new NonExistentAccountError("Conta não encontrada com numero: " + numberAccount);
     }
 
     private consultClientPerIndex(cpfClient: string) : number {
@@ -71,7 +86,10 @@ class Bank {
                 break;
             }
         }
-        return indexWanted;
+        if (indexWanted != -1)
+            return indexWanted;
+
+        throw new ClientNotFoundError("Cliente não encontrado com cpf: " + cpfClient);
     }
 
     deleteAccount(numberAccount: string) : boolean {
@@ -99,46 +117,28 @@ class Bank {
 
     update(account: Account) : void {
         const index = this.consultClientPerIndex(account.getNumber());
-        if (index != null) {
-            this.accounts[index] = account;
-        }
+        this.accounts[index] = account;
     }
 
-    withDraw(numberAccount: string, value:number) : boolean {
+    withDraw(numberAccount: string, value:number) {
         const index = this.consultAccountPerIndex(numberAccount);
-        if (index != -1) {
-            const account = this.accounts[index];
-            return account.withdraw(value);
-        }
-        console.log(`Nao fou encontrada conta com o numero: ${numberAccount}`);
-        return false;
+        const account = this.accounts[index];
+        return account.withdraw(value);
     }
 
-    deposit(numberAccount: string, value:number) : boolean {
+    deposit(numberAccount: string, value:number) {
         const index = this.consultClientPerIndex(numberAccount);
-        if (index != -1) {
-            const account = this.accounts[index];
-            account.deposit(value);
-            return true;
-        }
-
-        console.log(`Nao fou encontrada conta com o numero: ${numberAccount}`);
-        return false;
+        const account = this.accounts[index];
+        account.deposit(value);
     }
 
-    transfer(numberAccountTarget:string, numberAccountDestiny:string, value:number) : boolean {
+    transfer(numberAccountTarget:string, numberAccountDestiny:string, value:number) {
         const indexTarget = this.consultClientPerIndex(numberAccountTarget);
         const indexDestiny = this.consultClientPerIndex(numberAccountDestiny);
 
-        if(indexTarget != -1 && indexDestiny != -1) {
-            const accountTarget = this.accounts[indexTarget];
-            const accountDestiny = this.accounts[indexDestiny];
-            const transferSuccessfully = accountTarget.transfer(accountDestiny, value);
-            return transferSuccessfully;
-        }
-
-        console.log(`conta ${numberAccountTarget} ou conta ${numberAccountDestiny} nao encontrada `);
-        return false;
+        const accountTarget = this.accounts[indexTarget];
+        const accountDestiny = this.accounts[indexDestiny];
+        accountTarget.transfer(accountDestiny, value);
     }
 
     transferToListAccount(accounts: Account[], value:number) {
@@ -162,94 +162,59 @@ class Bank {
         return average;
     }
 
-    associateClientToAccount(numberAccount: string, cpfClient:string): boolean {
+    associateClientToAccount(numberAccount: string, cpfClient:string) {
         const accountSearched = this.consultAccount(numberAccount);
         const clientSearched = this.consultClient(cpfClient);
 
-        // case account and client exists
-        if (accountSearched && clientSearched) {
-            // case account belongs to the client
-            if(this.accountBelongsToTheClient(accountSearched, clientSearched)) {
-                console.log(`\nCliente de cpf ${cpfClient} ja possui conta de numero ${numberAccount}`);
-                return false;
-            }
-            clientSearched.addAccount(accountSearched);
-            accountSearched.setClient(clientSearched);
-            return true;
+        // case account belongs to the client
+        if(this.accountBelongsToTheClient(accountSearched, clientSearched)) {
+            throw new ClientAlreadyHasAccount(`Cliente de cpf ${cpfClient} ja possui conta de numero ${numberAccount}`);
         }
-
-        console.log(`\nConta de numero: ${numberAccount} ou cliente de cpf: ${cpfClient} nao encontrados`)
-        return false;
+        clientSearched.addAccount(accountSearched);
     }
 
-    listAccountsFromClient(cpf: string) : Account[] | null {
+    listAccountsFromClient(cpf: string) : Account[] {
         const client = this.consultClient(cpf);
-        if (client != null)
-            return client.getAccounts();
-
-        console.log(`Nao foi encontrado cliente de cpf: ${cpf}`);
-        return null;
+        return client.getAccounts();
     }
 
-    totalClientBalance(cpfClient: string) : number | null {
-        const client = this.consultClient(cpfClient);
-        if ( client != null) {
-            const accounts = client.getAccounts();
-            const arrayBalances = accounts.map(account => account.consultBalance());
-            const totalBalance = arrayBalances.reduce((previous, current) => previous+=current);
-            return totalBalance;
-        }
-
-        console.log(`Nao foi encontrado cliente de cpf: ${cpfClient}`);
-        return null;
+    totalClientBalance(cpfClient: string) : number {
+        const client : Client = this.consultClient(cpfClient);
+        const accounts : Account[] = client.getAccounts();
+        const arrayBalances : number[] = accounts.map(account => account.consultBalance());
+        const totalBalance : number = arrayBalances.reduce((previous, current) => previous+=current);
+        return totalBalance;
     }
 
-    insertClient(client: Client): boolean {
+    insertClient(client: Client) {
         const cpf = client.getCpf();
         client.setId(++this.currentClientId);
         if(this.cpfOrIdAlreadyExists(cpf, client.getId())){
-            console.log(`\nCliente de cpf ${cpf} ja esta cadastrado`);
-            return false;
+            throw new AlreadyExists(`Cliente de cpf ${cpf} ja esta cadastrado`);
         }
-
         this.clients.push(client);
-        return true;
     }
 
-    changeAccountHolder(numberAccount: string, cpfNewClient: string) : boolean {
+    changeAccountHolder(numberAccount: string, cpfNewClient: string) {
         const newClient = this.consultClient(cpfNewClient);
         const account = this.consultAccount(numberAccount);
 
-        if (account != null && newClient != null) {
-            const oldClient = account.getClient();
-            account.setClient(newClient);
-            newClient.addAccount(account);
-            oldClient?.removeAccount(account);
-            return true;
-        }
-
-        console.log("\ncliente ou conta nao encontrado!");
-        return false;
+        const oldClient = account.getClient();
+        account.setClient(newClient);
+        newClient.addAccount(account);
+        oldClient?.removeAccount(account);
     }
 
-    deleteClient(cpfClient: string) : boolean {
+    deleteClient(cpfClient: string) {
         let index = this.consultClientPerIndex(cpfClient);
-        
-        if(index != -1) {
-            
-            // remove this client of the accounts
-            this.removeAllOccurrencesInAccounts(cpfClient);
+    
+        // remove this client of the accounts
+        this.removeAllOccurrencesInAccounts(cpfClient);
 
-            for(let i = index; i < this.clients.length-1; i++){
-                this.clients[i] = this.clients[i+1];
-            }
-            this.clients.pop();
-
-            return true;
+        for(let i = index; i < this.clients.length-1; i++){
+            this.clients[i] = this.clients[i+1];
         }
-
-        console.log(`\nNao foi encontrado usuario com o cpf: ${cpfClient}`);
-        return false;
+        this.clients.pop();
     }
 
     getAccountsWithoutClient() : Account[] {
@@ -259,65 +224,49 @@ class Bank {
 
     }
 
-    transferToAll(sourceNumberAccount: string, numberAccounts: string[], amount: number) : boolean {
+    transferToAll(sourceNumberAccount: string, numberAccounts: string[], amount: number) {
 
-        // checking if source account exists
         const sourceAccount = this.consultAccount(sourceNumberAccount);
-        if (sourceAccount == null) {
-            console.log(`\nConta de numero: ${sourceNumberAccount} nao encontrada.`);
-            return false;
-        }
 
         // checking if all destiny accounts exists
         const listWithNumbersAccountsBank = this.accounts.map(a => a.getNumber());
         for (let number of numberAccounts) {
-            // console.log("conta: ", number);
-            // console.log("list:", listWithNumbersAccountsBank);
             if (!this.listHasValue(listWithNumbersAccountsBank, number)) {
-                console.log(`\nA conta numero ${number} nao foi encontrada.`)
-                return false;
+                throw new NonExistentAccountError(`A conta numero ${number} nao foi encontrada.`);
             }
         }
 
         // checking if source account has sufficient balance
         const totalExpanse = numberAccounts.length * amount;
         if (sourceAccount.consultBalance() < totalExpanse) {
-            console.log("\nSaldo insuficiente");
-            return false;
+            throw new InsufficientBalanceError("Saldo insuficiente");
         }
 
         const listDestinyAccounts : Array<Account> = [];
         for (let numberAccount of numberAccounts ) {
             let currentAccount = this.consultAccount(numberAccount);
-            if (currentAccount != null)
-                listDestinyAccounts.push(currentAccount);
+            listDestinyAccounts.push(currentAccount);
         }
         
         this.transferToListAccount(listDestinyAccounts, amount);
         sourceAccount.withdraw(totalExpanse);
-        return true;
     }
 
-    earnInterest(numberAccount : string) : boolean {
-        const accountSearched: Account | null = this.consultAccount(numberAccount);
-
-        if (accountSearched != null && accountSearched instanceof SavingsAccount) {
-            accountSearched.earnInterest();
-            return true;
+    earnInterest(numberAccount : string) {
+        const accountSearched: Account = this.consultAccount(numberAccount);
+        if (!(accountSearched instanceof SavingsAccount)) {
+            throw new UnauthorizedError(`Conta de nao autorizada, conta ${numberAccount} nao e SavingsAccount`);
         }
-
-        return false;
+        accountSearched.earnInterest();
     }
 
-    applyIncome(numberAccount: string) : boolean {
-        const accountSearched : Account | null = this.consultAccount(numberAccount);
+    applyIncome(numberAccount: string) {
+        const accountSearched : Account = this.consultAccount(numberAccount);
 
-        if (accountSearched != null && accountSearched instanceof InvestmentAccount) {
-            accountSearched.applyIncome();
-            return true;
+        if (!(accountSearched instanceof InvestmentAccount)) {
+            throw new UnauthorizedError(`Conta de nao autorizada, conta ${numberAccount} nao e InvestmentAccount`);
         }
-
-        return false;
+        accountSearched.applyIncome();
     }
 
     private listHasValue(list: Array<any>, value: any) : boolean {
